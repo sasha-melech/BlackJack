@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7ddba6f-9ba2-4291-a2bc-36025e785308" name="Changes" comment="add caleb's changes">
+    <list default="true" id="f7ddba6f-9ba2-4291-a2bc-36025e785308" name="Changes" comment="complete code">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BlackJack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BlackJack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,11 +115,20 @@
       <option name="project" value="LOCAL" />
       <updated>1729712752665</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="complete code">
+      <option name="closed" value="true" />
+      <created>1729724961154</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1729724961154</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add caleb's changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="add caleb's changes" />
+    <MESSAGE value="complete code" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete code" />
   </component>
 </project>

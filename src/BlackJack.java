@@ -1,10 +1,19 @@
+/**
+ * A class modeling a game of Black Jack between two players. One player will be the computer and
+ * the other a physical player who will interact with the console.
+ *
+ * @author Caleb Register
+ * @author Sasha Donaldson
+ * @version 10/23/2024
+ */
+
 import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
 public class BlackJack {
     /** The computer player */
-    private Player computer;
+    private final Player computer;
     /** A deck of cards */
     private Card[] deck;
     /** The size of a deck of cards */
@@ -34,12 +43,15 @@ public class BlackJack {
             System.out.println("Computer dealt another card.");
             System.out.println(formatHands());
         }
+        if (computer.cardCount() == 2) {
+            System.out.println("The computer passed it's turn.");
+        }
     }
 
     /**
      * Deal one card to a player, and advance the top card to be the next card.
-     * @param player
-     * @param faceUp
+     * @param player the player's hand that will be dealt a card from the top of the deck.
+     * @param faceUp when true, the card is dealt face up. When false it is dealt face down.
      */
     void dealOne(Player player, boolean faceUp) {
         Card cardDealt = deck[topCard++];
@@ -54,7 +66,7 @@ public class BlackJack {
 
     /**
      * Build up a string containing the game's results and return it.
-     * @return
+     * @return A string containing the above content.
      */
     String determineResults() {
         String results = "\n\nResults\n==========%s\n%s";
@@ -71,7 +83,7 @@ public class BlackJack {
 
     /**
      * Convert the computer and player's hands to a String and return it.
-     * @return
+     * @return The string containing this formatted data.
      */
     String formatHands() {
         return player.toString()  + computer.toString();
@@ -79,11 +91,11 @@ public class BlackJack {
 
     /**
      * Helper method to determine the winner.
-     * @param player
-     * @param computer
-     * @return
+     * @param player the human player.
+     * @param computer the computer player.
+     * @return a string detailing who won the game.
      */
-    public static String formatWinner(Player player, Player computer) {
+    private String formatWinner(Player player, Player computer) {
         String winnerMessage = "%s wins with a %s.";
         int winIndicator = player.compareTo(computer);
         if (winIndicator > 0) {
@@ -101,15 +113,15 @@ public class BlackJack {
 
     /**
      * Get a reference to the computer player.
-     * @return
+     * @return The computer player
      */
     Player getComputerPlayer() {
         return computer;
     }
 
     /**
-     * Get a reference to the deck.
-     * @return
+     * Get a reference to the deck. Used for testing purposes only.
+     * @return A reference to the deck.
      */
     Card[] getDeck() {
         return deck;
@@ -117,7 +129,7 @@ public class BlackJack {
 
     /**
      * Get a reference to the human player.
-     * @return
+     * @return The human player.
      */
     Player getHumanPlayer() {
         return player;
