@@ -1,3 +1,4 @@
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -16,27 +17,22 @@ public class BlackJack {
     private int topCard;
 
     public BlackJack() {
+        computer = new Player("Computer");
         enterPlayerName();
-
-        deck = new Card[DECK_SIZE]; //Initializes the size of the array in pack
-        int cardNum = 0;
-        for (Suit suit : Suit.values()) {
-            for (Face face : Face.values()) {
-                deck[cardNum++] = new Card(face, suit, false);
-            }
-        }
-
+        initDeck();
     }
 
     /**
      * The computer player takes a turn.
      */
     private void computerTurn() {
-        boolean hasBlackjack = computer.getHandType() == HandType.BJACK;
-        boolean under16 = computer.handValue() < 16;
-        boolean attemptFiveCardTrick = computer.handValue() < 19 && player.isFull();
-        if (!hasBlackjack && under16 || attemptFiveCardTrick) {
-            // TODO: add computer turn
+        System.out.println("\nComputer's Turn\n========");
+        while ((!(computer.getHandType() == HandType.BJACK) &&
+                 (computer.handValue() < 16)) ||
+                 (computer.handValue() < 19 && player.cardCount() == 4)) {
+            dealOne(computer, false);
+            System.out.println("Computer dealt another card.");
+            System.out.println(formatHands());
         }
     }
 
@@ -46,7 +42,14 @@ public class BlackJack {
      * @param faceUp
      */
     void dealOne(Player player, boolean faceUp) {
-        ;
+        Card cardDealt = deck[topCard++];
+        if (faceUp) {
+            cardDealt.setFaceUp();
+        }
+        else {
+            cardDealt.setFaceDown();
+        }
+        player.addCard(cardDealt);
     }
 
     /**
@@ -54,7 +57,8 @@ public class BlackJack {
      * @return
      */
     String determineResults() {
-        ;
+        String results = "\n\nResults\n==========%s\n%s";
+        return String.format(results, formatHands(), formatWinner(computer, player));
     }
 
     /**
@@ -70,7 +74,7 @@ public class BlackJack {
      * @return
      */
     String formatHands() {
-        ;
+        return player.toString()  + computer.toString();
     }
 
     /**
@@ -79,8 +83,20 @@ public class BlackJack {
      * @param computer
      * @return
      */
-    private String formatWinner(Player player, Player computer) {
-        ;
+    public static String formatWinner(Player player, Player computer) {
+        String winnerMessage = "%s wins with a %s.";
+        int winIndicator = player.compareTo(computer);
+        if (winIndicator > 0) {
+            winnerMessage = String.format(winnerMessage, player.getName(), player.getHandType().toString());
+        }
+        if (winIndicator < 0) {
+            winnerMessage = String.format(winnerMessage, computer.getName(), computer.getHandType().toString());
+        }
+        else if (winIndicator == 0) {
+            winnerMessage = "The game was a tie.";
+        }
+        winnerMessage = "\n" + winnerMessage + "\n";
+        return winnerMessage;
     }
 
     /**
@@ -111,36 +127,77 @@ public class BlackJack {
      * Ask the player to enter their name and then play a round of Blackjack.
      */
     void go() {
-        ;
+        shuffle();
+        String response = "";
+        while (!response.equals("n")) {
+            oneRound();
+            boolean repeat = false;
+            while (!repeat) {
+                System.out.println("Play again? (Y/N) >");
+                response = scanIn.next();
+                response = response.toLowerCase();
+                if (response.equals("y") || response.equals("n")) {
+                    repeat = true;
+                }
+            }
+            player.clearCards();
+            computer.clearCards();
+        }
     }
 
     /**
      * Initialize a deck of cards (without Jokers).
      */
     void initDeck() {
-        ;
-    }
-
-    /**
-     * Main for testing the Blackjack class -- not required for the project.
-     * @param args
-     */
-    static void main(String[] args) {
-        ;
+        deck = new Card[DECK_SIZE]; //Initializes the size of the array in pack
+        int cardNum = 0;
+        for (Suit suit : Suit.values()) {
+            for (Face face : Face.values()) {
+                deck[cardNum++] = new Card(face, suit, false);
+            }
+        }
     }
 
     /**
      * Play one round of BlackJack.
      */
     void oneRound() {
-        ;
+        if (52 - topCard <= 22) {
+            shuffle();
+        }
+        dealOne(computer, true);
+        dealOne(player, true);
+        dealOne(computer, false);
+        dealOne(player, true);
+        System.out.println(formatHands());
+
+        playerTurn();
+        computerTurn();
+
+        player.turnCardsUp();
+        computer.turnCardsUp();
+        System.out.println(determineResults());
     }
 
     /**
      * Prompts the player if they would like another card with a "H"/"S" response, case-insensitive.
      */
     private void playerTurn() {
-        ;
+        System.out.println("\n" + player.getName() + "'s Turn:\n========");
+        char response = 'q';
+        while (response != 's' && !player.isFull() && !(player.handValue() > 21)) {
+            System.out.print("Hit or Stay(H/S)? >");
+            response = scanIn.next().charAt(0);
+//            response = 'H';
+            response = Character.toLowerCase(response);
+            if (response == 'h') {
+                dealOne(player, true);
+                System.out.println(player.toString());
+            }
+            else if (response != 's'){
+                System.out.println("Enter a valid response");
+            }
+        }
     }
 
     /**
@@ -152,6 +209,7 @@ public class BlackJack {
             int j = random.nextInt(DECK_SIZE);
             swap(i, j);
         }
+        topCard = 0;
     }
 
     /**

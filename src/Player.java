@@ -24,6 +24,7 @@ public class Player {
      */
     public Player(String name) {
         this.name = name;
+        clearCards();
     }
 
     /**
@@ -54,7 +55,7 @@ public class Player {
      * @return
      */
     public int cardCount() {
-        return hand.length;
+        return cardsInHand;
     }
 
     /**
@@ -63,7 +64,14 @@ public class Player {
      * @return
      */
     public boolean addCard(Card card) {
-        ;
+        for (int i = 0; i < hand.length; i++) {
+            if (getCard(i) == null) {
+                setCard(i, card);
+                cardsInHand++;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -81,7 +89,7 @@ public class Player {
      * @return
      */
     public Card getCard(int index) {
-        ;
+        return hand[index];
     }
 
     /**
@@ -89,6 +97,7 @@ public class Player {
      */
     public void clearCards() {
         hand = new Card[MAX_CARDS];
+        cardsInHand = 0;
     }
 
     /**
@@ -96,7 +105,7 @@ public class Player {
      * @return boolean indicating of a player's hand greater than or equal to the card limit.
      */
     public boolean isFull() {
-        return hand.length >= MAX_CARDS;
+        return cardCount() >= MAX_CARDS;
     }
 
     /**
@@ -105,17 +114,14 @@ public class Player {
      */
     @Override                  // is this needed?
     public String toString() {
-        String handExpression = this.name + "'s Hand:\n\t";
-        int count = 0;
-        if (cardsInHand > 0) {
-            for (Card card : hand) {
-                if (count == 1) {
-                    handExpression = handExpression + "\t|\t";
-                }
-                handExpression = handExpression + card;
-                count = 1;
+        String handExpression = "\n" + this.name + "'s Hand:\n\t";
+        for (int i = 0; i < cardCount(); i++) {
+            if (i != 0) {
+                handExpression = handExpression + "\t|\t";
             }
-        } else {
+            handExpression = handExpression + hand[i];
+        }
+        if (cardCount() == 0) {
             handExpression = handExpression + "No cards";
         }
         return handExpression;
@@ -128,7 +134,9 @@ public class Player {
     public int handValue() {
         int total = 0;
         for (Card card : hand) {
-            total += card.getName().value();  // Changed to ".getName" from ".name"
+            if (card!=null) {
+                total += card.getName().value();  // Changed to ".getName" from ".name"
+            }
         }
         return total;
     }
@@ -137,7 +145,9 @@ public class Player {
      * Makes all the cards in the player's hand be face up.
      */
     public void turnCardsUp() {
-        ;
+        for (int i = 0; i < cardCount(); i++) {
+            hand[i].setFaceUp();
+        }
     }
 
     /**
@@ -146,11 +156,11 @@ public class Player {
      */
     public HandType getHandType() {
         HandType handType = null;
-        if (isBust()) {
-            handType = HandType.BUST;
-        }
-        if (handValue() > 21) {
+        if (handValue() < 21) {
             handType = HandType.TOTAL;
+        }
+        else if (isBust()) {
+            handType = HandType.BUST;
         }
         else {
             if (cardsInHand == 5) {
@@ -199,7 +209,7 @@ public class Player {
             scoreDifference = handValue() - otherPlayer.handValue();
         }
         else {
-            scoreDifference = playerHandType.ordinal() - otherHandType.ordinal();
+            scoreDifference = otherHandType.ordinal() - playerHandType.ordinal();
         }
         return scoreDifference;
     }
