@@ -137,7 +137,7 @@ public class BlackJack {
     }
 
     /**
-     * Prompts the player if they would like another card with a "H"/"S" response, case insensitive.
+     * Prompts the player if they would like another card with a "H"/"S" response, case-insensitive.
      */
     private void playerTurn() {
         ;

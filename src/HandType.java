@@ -5,7 +5,9 @@
  * 
  * @author William Kreahling
  * @author Andrew Scott
- * @version Spring 2024
+ * @author Caleb Register
+ * @author Sasha Donaldson
+ * @version 10/23/2024
  */
 public enum HandType {
     /** Blackjack */    
@@ -28,15 +30,15 @@ public enum HandType {
      * Construct and enum with a name.
      * @param name the name to display when printed.
      */
-     private HandType(String name) {
+    private HandType(String name) {
          NAME = name;
-     }
+    }
     
     /**
      * Convert the enum to its displayable name.
      * @return The display name for this hand type.
      */
-    @Override
+    @Override                   // is this needed?
     public String toString() {
         return NAME;
     }
